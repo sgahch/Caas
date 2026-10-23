@@ -1,0 +1,22 @@
+node_modules/
+*.log
+.DS_Store
+delivery/
+
+.qa/
+release/
+desktop/
+dist/
+
+# Local automation and verification artifacts
+.playwright-cli/
+output/
+evidence/
+NVIDIA Corporation/
+
+# Machine-specific settings and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key

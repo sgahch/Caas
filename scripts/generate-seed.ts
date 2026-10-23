@@ -1,0 +1,2 @@
+import {DesktopService} from '../electron/service';import {mkdirSync,writeFileSync,copyFileSync} from 'node:fs';import {resolve} from 'node:path';
+const service=new DesktopService(resolve('.qa/standard-seed-'+Date.now()),()=>{},false);mkdirSync('resources',{recursive:true});writeFileSync('resources/standard.caas.json',service.exportText(),'utf8');service.close();copyFileSync(resolve(service.root,'data/caas.sqlite'),'resources/caas-nationwide.sqlite');console.log('Versioned standard content package written');

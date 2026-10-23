@@ -1,0 +1,5 @@
+import type {State} from './store';import type {Config} from './config';
+export interface Snapshot{state:State;config:Config;configRevision:number;businessRevision:number;runtimeRevision:number;runId:string;playing:boolean;maintenance:boolean;preview?:boolean}
+export interface Bridge{snapshot:()=>Promise<Snapshot>;dispatch:(input:any)=>Promise<Snapshot>;openAdmin:()=>Promise<any>;authStatus:()=>Promise<any>;login:(password:string)=>Promise<any>;logout:()=>Promise<any>;changePassword:(old:string,next:string)=>Promise<any>;adminRead:()=>Promise<any>;saveDraft:(draft:any)=>Promise<any>;beginMaintenance:()=>Promise<any>;discardDraft:()=>Promise<any>;preview:()=>Promise<any>;applyDraft:(input:any)=>Promise<any>;exportPackage:()=>Promise<any>;chooseImport:()=>Promise<any>;confirmImport:(id:string)=>Promise<any>;backups:()=>Promise<string[]>;previewBackup:(id:string)=>Promise<any>;factory:()=>Promise<any>;chooseLogo:()=>Promise<string|null>;exportCsv:(input:any)=>Promise<boolean>;onChanged:(fn:()=>void)=>()=>void;onOperatorToggle?:(fn:()=>void)=>()=>void}
+declare global{interface Window{caas:Bridge}}
+export const bridge=window.caas;

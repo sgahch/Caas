@@ -1,0 +1,91 @@
+{
+  "name": "caas-compute-console",
+  "version": "2.6.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "npm run build:renderer && npm run build:desktop",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "tsx --test src/store.test.ts src/telemetry.test.ts src/dashboard-data.test.ts src/geo.test.ts electron/service.test.ts src/token-engine.test.ts src/rental-data.test.ts src/model-usage.test.ts src/nationwide.test.ts",
+    "build:renderer": "tsc --noEmit && vite build",
+    "build:desktop": "tsc --noEmit -p tsconfig.electron.json && node scripts/build-desktop.mjs",
+    "start": "npm run build && electron .",
+    "dist:win": "npm run build && electron-builder --win nsis portable --x64",
+    "pack:win": "npm run build && electron-builder --win --dir --x64",
+    "test:ui": "node scripts/full-ui-test.mjs",
+    "test:packaged": "node scripts/final-package-test.mjs",
+    "test:portable": "node scripts/portable-smoke.mjs",
+    "prepare:delivery": "node scripts/prepare-delivery.mjs",
+    "test:commerce": "node scripts/commerce-ui-test.mjs"
+  },
+  "dependencies": {
+    "echarts": "6.1.0",
+    "lucide": "0.468.0",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1",
+    "@types/node": "24.10.1",
+    "@types/three": "0.180.0",
+    "electron": "44.9.0",
+    "electron-builder": "26.15.3",
+    "esbuild": "0.28.2",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vite": "7.3.7"
+  },
+  "description": "CaaS Windows 离线算力演示与本地管理平台",
+  "author": "CaaS",
+  "main": "desktop/main.cjs",
+  "build": {
+    "appId": "com.caas.desktop",
+    "productName": "CaaSDesktop",
+    "directories": {
+      "output": "release/v2.6.1"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/**/*",
+      "package.json",
+      "!node_modules/**/*"
+    ],
+    "asar": true,
+    "npmRebuild": false,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "executableName": "CaaSDesktop",
+      "icon": "build/icon.ico",
+      "signExecutable": false
+    },
+    "nsis": {
+      "artifactName": "CaaS-Setup-x64.exe",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false,
+      "createDesktopShortcut": true
+    },
+    "portable": {
+      "artifactName": "CaaS-Portable-x64.exe"
+    },
+    "electronLanguages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "electronDist": "node_modules/electron/dist"
+  }
+}

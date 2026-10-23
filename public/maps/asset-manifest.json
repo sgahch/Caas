@@ -1,0 +1,9 @@
+{
+  "file": "china-adm1.geojson",
+  "sha256": "bc4afc7eacf4351ae5b3ae7a612327987ce1123cb5deb8574fb49107091c6623",
+  "featureCount": 34,
+  "sizeBytes": 263343,
+  "retrievedAt": "2026-10-19",
+  "metadataURL": "https://www.geoboundaries.org/api/current/gbOpen/CHN/ADM1/",
+  "downloadURL": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/CHN/ADM1/geoBoundaries-CHN-ADM1_simplified.geojson"
+}

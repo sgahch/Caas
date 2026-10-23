@@ -1,0 +1,1 @@
+{"extends":"./tsconfig.json","compilerOptions":{"types":["node"],"esModuleInterop":true},"include":["electron/**/*.ts","src/store.ts","src/config.ts"],"exclude":["**/*.test.ts"]}
