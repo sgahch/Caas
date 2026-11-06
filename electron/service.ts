@@ -1,6 +1,8 @@
 import {enrichProductCatalog,PRODUCT_CATALOG_EVENT} from '../src/product-catalog';
 import {enrichModelRoutes,MODEL_ROUTES_EVENT} from '../src/model-usage';
 import {enrichNationwide,NATIONWIDE_EVENT} from '../src/nationwide';
+import {CORE_CENTERS_EVENT,retainCoreCenters} from '../src/center-policy';
+import {cleanupRemovedConfig} from '../src/scenario';
 import {enrichDemoGpuModels,GPU_CATALOG_EVENT} from '../src/gpu-catalog';
 import {defaultTokenSimulation} from '../src/token-engine';
 import {initializeTelemetry} from '../src/telemetry';
@@ -35,6 +37,15 @@ export class DesktopService{
   if(!this.state.processedDemoEventIds.includes(GPU_CATALOG_EVENT)){this.autoBackup();enrichDemoGpuModels(this.state);enrichDemoGpuModels(this.baseline);if(this.draft?.state)enrichDemoGpuModels(this.draft.state);validate(this.state);validate(this.baseline);this.meta.businessRevision++;this.meta.runtimeRevision++;if(this.draft?.state)this.draft.sourceBusinessRevision=this.meta.businessRevision;this.persist();}
   if(!this.state.processedDemoEventIds.includes(PRODUCT_CATALOG_EVENT)||!this.state.processedDemoEventIds.includes(MODEL_ROUTES_EVENT)){this.autoBackup();for(const scene of [this.state,this.baseline,this.draft?.state])if(scene){enrichProductCatalog(scene);enrichModelRoutes(scene);enrichNationwide(scene);}validate(this.state);validate(this.baseline);this.meta.businessRevision++;this.meta.runtimeRevision++;if(this.draft?.state)this.draft.sourceBusinessRevision=this.meta.businessRevision;this.persist();}
   if(!this.state.processedDemoEventIds.includes(NATIONWIDE_EVENT)){this.autoBackup();for(const scene of [this.state,this.baseline,this.draft?.state])if(scene)enrichNationwide(scene);validate(this.state);validate(this.baseline);this.meta.businessRevision++;this.meta.runtimeRevision++;if(this.draft?.state)this.draft.sourceBusinessRevision=this.meta.businessRevision;this.persist();}
+  if(!this.state.processedDemoEventIds.includes(CORE_CENTERS_EVENT)){
+   this.autoBackup();this.mutate(()=>{
+    retainCoreCenters(this.state);retainCoreCenters(this.baseline);cleanupRemovedConfig(this.config,this.state);
+    if(this.draft){if(this.draft.state)retainCoreCenters(this.draft.state,false);cleanupRemovedConfig(this.draft.config,this.draft.state||this.state);}
+    validate(this.state);validate(this.baseline);validateConfig(this.config,this.state);
+    this.meta.businessRevision++;this.meta.runtimeRevision++;this.meta.configRevision++;
+    if(this.draft){this.draft.draftBaseConfigRevision=this.meta.configRevision;this.draft.sourceBusinessRevision=this.meta.businessRevision;}
+   });
+  }
   (this.meta as any).refreshSeconds||=this.config.refreshSeconds;
   this.stamp=performance.now();
   if(clock)this.timer=setInterval(()=>{try{this.pulse();}catch(e){this.meta.playing=false;console.error('计量保存失败',e);this.changed();}},1000);
@@ -82,6 +93,8 @@ export class DesktopService{
   normalizeLegacy(v.state);normalizeLegacy(v.baseline);normalizeLegacyConfig(v.config);
   if(v.draft){normalizeLegacy(v.draft.state);normalizeLegacyConfig(v.draft.config);}
   for(const scene of [v.state,v.baseline,v.draft?.state])if(scene){enrichProductCatalog(scene);enrichModelRoutes(scene);enrichNationwide(scene);}
+  retainCoreCenters(v.state);retainCoreCenters(v.baseline);cleanupRemovedConfig(v.config,v.state);
+  if(v.draft){if(v.draft.state)retainCoreCenters(v.draft.state,false);cleanupRemovedConfig(v.draft.config,v.draft.state||v.state);}
   validate(v.state);validate(v.baseline);validateConfig(v.config,v.state);
   if(v.draft){validateConfig(v.draft.config,v.draft.state||v.state,true);if(v.draft.state&&JSON.stringify(v.draft.state).length>45*1024*1024)throw Error('草稿过大');}
   return v;

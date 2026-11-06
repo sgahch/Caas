@@ -1,6 +1,8 @@
-# CaaS 算力调度管理平台 2.6.1
+# CaaS 算力调度管理平台 2.6.3
 
 Windows 离线桌面平台，沿用 Electron + TypeScript + ECharts + Three.js + SQLite。
+
+后台可维护记录已统一为“删除”：确认时列出关联清理范围，不再要求手动拆关系。租户删除保留硬件并解除归属；单条账单、告警或计量删除不反向移除整笔业务。操作在维护草稿中完成，保存并应用前自动备份。详见 [使用说明](docs/USER_GUIDE.md)。
 
 本轮新增独立算力租赁数据页、日/周/月/年租金卡片及八张租金图表，总览同步展示租赁收入；增加四款产品目录与租赁规格校验，以及国内外模型 Token 用量排行。保留原有资源监控、地图、业务流程和本地后台。详细计量口径与待报价产品说明见 [租赁与模型用量](docs/RENTAL_ANALYTICS.md)。
 
@@ -11,7 +13,7 @@ Windows 离线桌面平台，沿用 Electron + TypeScript + ECharts + Three.js +
 - Windows 打包：`npm run dist:win`
 - 交付整理：`npm run prepare:delivery`（需要最终 EXE 验收证据）
 
-最终交付在 `delivery/v2.6.1`，使用及验证说明在 `docs`。数据位于 `%APPDATA%\CaaSDesktop`；升级请先退出旧版，保留原数据库。默认资源与计量均为明确标记的本地演示数据。
+最终交付在 `delivery/v2.6.3`，使用及验证说明在 `docs`。数据位于 `%APPDATA%\CaaSDesktop`；升级请先退出旧版，保留原数据库。默认资源与计量均为明确标记的本地演示数据。
 
 # CaaS v2.4.3 离线桌面平台
 

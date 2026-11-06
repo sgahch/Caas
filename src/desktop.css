@@ -6,3 +6,4 @@
 @media(max-width:950px){.sidebar{width:150px}.main{margin-left:150px}.nav-item span,.subnav,.nav-group span{display:block}.sidebar nav{padding:0 8px}.nav-item{justify-content:flex-start;padding:0 10px}.brand>span:last-child{display:block}.sidebar-bottom{display:block}.sidebar nav:after{content:none}.resource-panel{display:block}.metric:last-child{grid-column:auto}.top-actions>span{display:none}}
 
 .nav-item.active{box-shadow:inset 3px 0 0 var(--accent);color:var(--accent)}.metric.cyan .metric-value{color:#78e5fa}.metric.purple .metric-value{color:#be8aff}.map-label{font-size:12px;background:#06213bea;border:1px solid #2c91bc;color:#e6f8ff;padding:6px 9px;box-shadow:0 0 20px #0d87bb44}.map-label small{font-size:10px}.map-label.edge{border-color:#925bd3;color:#d9bdff}@media(min-width:1800px){#map{height:410px}.resource-row{height:139px}}
+.deletion-scope{min-width:0;overflow-wrap:anywhere}

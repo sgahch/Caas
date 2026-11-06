@@ -1,13 +1,13 @@
 {
   "name": "caas-compute-console",
-  "version": "2.6.1",
+  "version": "2.6.3",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "npm run build:renderer && npm run build:desktop",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "tsx --test src/store.test.ts src/telemetry.test.ts src/dashboard-data.test.ts src/geo.test.ts electron/service.test.ts src/token-engine.test.ts src/rental-data.test.ts src/model-usage.test.ts src/nationwide.test.ts",
+    "test": "tsx --test src/store.test.ts src/telemetry.test.ts src/dashboard-data.test.ts src/geo.test.ts electron/service.test.ts src/token-engine.test.ts src/rental-data.test.ts src/model-usage.test.ts src/nationwide.test.ts src/record-relations.test.ts src/site-management.test.ts",
     "build:renderer": "tsc --noEmit && vite build",
     "build:desktop": "tsc --noEmit -p tsconfig.electron.json && node scripts/build-desktop.mjs",
     "start": "npm run build && electron .",
@@ -42,7 +42,7 @@
     "appId": "com.caas.desktop",
     "productName": "CaaSDesktop",
     "directories": {
-      "output": "release/v2.6.1"
+      "output": "release/v2.6.3"
     },
     "files": [
       "dist/**/*",

@@ -4,13 +4,6 @@ import {initializeTelemetry} from './telemetry';
 
 export const NATIONWIDE_EVENT='catalog:nationwide-v1';
 // City positions and capacity are local demonstration inventory, not verified deployments.
-export const nationalCenters:[string,string,number,number,string][]=[
- ['BJ','北京智算中心',116.4,39.9,'IM'],['SH','上海智算中心',121.47,31.23,'BJ'],
- ['GZ','广州智算中心',113.26,23.13,'NN'],['WH','武汉智算中心',114.3,30.59,'SH'],
- ['XA','西安智算中心',108.94,34.34,'CD'],['SY','沈阳智算中心',123.43,41.8,'BJ'],
- ['HR','哈尔滨智算中心',126.63,45.75,'SY'],['UQ','乌鲁木齐智算中心',87.62,43.83,'LZ'],
- ['LZ','兰州智算中心',103.83,36.06,'XA'],['LS','拉萨智算中心',91.13,29.65,'CD']
-];
 export const provincialEdges:[string,string,number,number][]=[
  ['天津','天津',117.2,39.12],['河北','石家庄',114.51,38.04],['山西','太原',112.55,37.87],
  ['内蒙古','呼和浩特',111.67,40.82],['辽宁','沈阳',123.43,41.8],['吉林','长春',125.32,43.82],
@@ -23,7 +16,7 @@ export const provincialEdges:[string,string,number,number][]=[
 ];
 export function enrichNationwide(s:State){
  if(s.processedDemoEventIds.includes(NATIONWIDE_EVENT))return false;
- const centerTemplate=s.nodes.find(n=>n.deviceType==='center'),edgeTemplate=s.nodes.find(n=>n.deviceType==='edge');
+ const edgeTemplate=s.nodes.find(n=>n.deviceType==='edge');
  const edgeSite=s.sites.find(n=>n.kind==='edge');
  const added:Row[]=[];
  const makeNode=(template:Row,id:string,siteId:string,model:string,gpu:number,edge=false)=>{
@@ -32,16 +25,6 @@ export function enrichNationwide(s:State){
   n.samples=Array.from({length:60},(_,i)=>({time:s.demoNow-(59-i)*60000,value:gpu?66:0,cpuValue:42,memoryValue:46,storageValue:32,vramValue:gpu?58:0}));
   s.nodes.push(n);added.push(n);return n;
  };
- if(centerTemplate)for(const [index,[id,name,longitude,latitude,routeTo]] of nationalCenters.entries()){
-  // A stable ID owned by an existing user record is never overwritten or extended.
-  if(s.sites.some(v=>v.id===id))continue;
-  s.sites.push({id,name,kind:'center',longitude,latitude,offsetX:0,offsetY:0,routeTo:s.sites.some(v=>v.id===routeTo)||nationalCenters.some(v=>v[0]===routeTo)?routeTo:centerTemplate.siteId,description:'全国资源预置样例'});
-  for(let i=1;i<=4;i++){
-   const nodeId=`${id}-${String(i).padStart(2,'0')}`;if(s.nodes.some(n=>n.id===nodeId))continue;
-   const n=makeNode(centerTemplate,nodeId,id,[index%2?'H200':'L40S',index%2?'H100':'A800','RTX 5090','RTX 4090'][i-1],i===4?1:8);
-   n.ip=`10.${30+index}.0.${i}`;
-  }
- }
  if(edgeTemplate&&edgeSite)for(const [index,[region,city,longitude,latitude]] of provincialEdges.entries()){
   if(s.nodes.some(n=>n.deviceType==='edge'&&n.edgeRegion===region))continue;
   const id=`EDGE-N-${String(index+1).padStart(2,'0')}`;if(s.nodes.some(n=>n.id===id))continue;
